@@ -375,5 +375,5 @@ Pour **[Cogiterra Éditions](https://www.actu-environnement.com)** (Actu-Environ
 ---
 
 <div align="center">
-<sub>Built with Python · Streamlit · Claude · ❤️ · in 48h</sub>
+<sub>Built with Python · Streamlit · in 48h</sub>
 </div>
