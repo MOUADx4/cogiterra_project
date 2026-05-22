@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>Cogiterra Bounces · Pitch Hackathon 2026</title>
+
+<link rel="icon" href="../../dashboard/assets/cogiterra_logo.png">
+
+<!-- reveal.js core -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-25..200" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #07080f;
+  --bg2: #0d0d18;
+  --fg: #fafafa;
+  --muted: #94a3b8;
+  --dim: #71717a;
+  --accent: #3b82f6;
+  --accent2: #8b5cf6;
+  --success: #10b981;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --violet: #a855f7;
+}
+
+html, body, .reveal {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  background: var(--bg);
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+
+/* Background avec halos */
+.reveal {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(59,130,246,0.10) 0%, transparent 35%),
+    radial-gradient(circle at 85% 100%, rgba(168,85,247,0.10) 0%, transparent 40%),
+    linear-gradient(180deg, #07080f 0%, #0d0d18 100%);
+}
+
+/* Grille subtile */
+.reveal::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: 1;
+}
+
+.reveal .slides > section, .reveal .slides > section > section {
+  text-align: left;
+  padding: 30px 50px;
+}
+
+/* Typography */
+.reveal h1 {
+  font-size: 4.5rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #fafafa 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.4em;
+  text-shadow: none;
+}
+.reveal h2 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fafafa;
+  margin-bottom: 0.5em;
+  text-shadow: none;
+}
+.reveal h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #e2e8f0;
+  text-shadow: none;
+}
+.reveal p, .reveal li { color: #cbd5e1; font-size: 1.15rem; line-height: 1.6; }
+.reveal strong, .reveal b { color: #fafafa; }
+.reveal em { color: #a1a1aa; font-style: normal; font-size: 0.95em; }
+.reveal code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.9em;
+  color: #a7f3d0;
+}
+.reveal pre code { padding: 16px; font-size: 0.8rem; line-height: 1.5; }
+.reveal a { color: #60a5fa; }
+
+/* Logo top-right */
+.logo-corner {
+  position: fixed;
+  top: 25px; right: 25px;
+  width: 130px;
+  opacity: 0.75;
+  z-index: 100;
+  filter: brightness(1.15);
+}
+
+/* Slide numbers */
+.reveal .slide-number {
+  background: rgba(0,0,0,0.4);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.badge-ok      { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.badge-warn    { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.badge-danger  { background: rgba(239,68,68,0.12);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.badge-info    { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.badge-violet  { background: rgba(168,85,247,0.12); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+
+/* Material icons */
+.mi {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 400;
+  vertical-align: middle;
+  color: #60a5fa;
+  display: inline-block;
+  line-height: 1;
+}
+.mi-fill { font-variation-settings: 'FILL' 1; }
+.mi-green { color: #34d399; }
+.mi-amber { color: #fbbf24; }
+.mi-red    { color: #f87171; }
+.mi-violet { color: #c084fc; }
+.mi-white { color: #fafafa; }
+
+/* Bento cards */
+.bento {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.09);
+  backdrop-filter: blur(20px);
+  padding: 28px;
+  border-radius: 22px;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+}
+.bento.violet { border-color: rgba(168,85,247,0.25); }
+.bento.blue   { border-color: rgba(59,130,246,0.25); }
+.bento.green  { border-color: rgba(16,185,129,0.25); }
+.bento.amber  { border-color: rgba(245,158,11,0.25); }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* KPI big */
+.kpi-big { font-size: 5.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.kpi-mid { font-size: 3.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi-label { color: var(--dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+
+/* Highlight gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-green {
+  background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-warn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f87171 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Pulse dot */
+.pulse {
+  display: inline-block; width: 9px; height: 9px;
+  background: #10b981; border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+@keyframes pulse-ring {
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+  50%     { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
+}
+
+/* Center utilities */
+.center { text-align: center; }
+.muted  { color: var(--muted); }
+.dim    { color: var(--dim); }
+
+.feature-icon {
+  display: inline-flex;
+  width: 56px; height: 56px;
+  align-items: center; justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.10));
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 14px;
+}
+.feature-icon .mi { font-size: 32px; color: #60a5fa; }
+
+ul.clean { list-style: none; padding: 0; }
+ul.clean li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 1.05rem;
+}
+ul.clean li:last-child { border-bottom: 0; }
+
+/* Tech stack chips */
+.chip {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  margin: 4px;
+}
+.chip strong { color: #fafafa; }
+
+/* Diff arrows */
+.arrow-flow {
+  display: flex; align-items: center; gap: 18px;
+  font-size: 1.05rem; padding: 12px 0;
+}
+.arrow-flow .from { color: #f87171; }
+.arrow-flow .to   { color: #34d399; }
+
+/* Progress bars */
+.bar { background: rgba(255,255,255,0.05); border-radius: 8px; height: 12px; overflow: hidden; margin: 8px 0; }
+.bar-fill { height: 100%; border-radius: 8px; }
+
+.controls-hint {
+  position: fixed; bottom: 16px; left: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--dim);
+  z-index: 100;
+}
+
+/* === Slides spécifiques === */
+
+/* Slide titre */
+.title-hero {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 80vh; text-align: center;
+}
+.title-hero .logo { width: 180px; margin-bottom: 30px; filter: brightness(1.2); }
+
+/* Quote */
+.quote {
+  font-size: 1.6rem;
+  font-style: italic;
+  color: #cbd5e1;
+  border-left: 4px solid var(--accent);
+  padding: 16px 28px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(139,92,246,0.04));
+  border-radius: 0 16px 16px 0;
+  line-height: 1.5;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Logo en coin sur toutes les slides -->
+<img src="../../dashboard/assets/cogiterra_logo.png" class="logo-corner" alt="Cogiterra"/>
+
+<!-- Hint de contrôle -->
+<div class="controls-hint">→ next · ← prev · F fullscreen · ESC overview</div>
+
+<div class="reveal"><div class="slides">
+
+<!-- ================================================================== 1 -->
+<section data-background-color="#07080f" data-transition="zoom">
+  <div class="title-hero">
+    <img src="../../dashboard/assets/cogiterra_logo.png" class="logo" alt="Cogiterra"/>
+    <h1 class="gradient-text" style="font-size:6rem; margin-bottom:0.2em;">Bounces</h1>
+    <h3 style="color:#94a3b8; font-weight:500; margin-top:0; letter-spacing:0.02em;">
+      Pipeline intelligent de traitement des emails en échec
+    </h3>
+    <div style="margin-top:50px;">
+      <span class="badge badge-info"><span class="pulse"></span> Hackathon H3 Hitema 2026</span>
+      &nbsp;
+      <span class="badge badge-violet">Pour Cogiterra Éditions</span>
+    </div>
+    <p style="margin-top:60px; color:#71717a; font-size:0.9rem; letter-spacing:0.1em;">
+      MOUAD &nbsp;·&nbsp; H3 NIGHT INNOVATHON &nbsp;·&nbsp; 21 mai 2026
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================== 2 -->
+<section data-background-color="#07080f">
+  <div style="margin-top:40px;">
+    <p class="kpi-label" style="color:#fbbf24;">LE PROBLÈME</p>
+    <h2 style="font-size:3.2rem;">Chaque jour, Cogiterra envoie…</h2>
+  </div>
+
+  <div class="grid-3" style="margin-top:50px;">
+    <div class="bento" style="text-align:center;">
+      <div class="kpi-big gradient-text">200K</div>
+      <p class="muted" style="margin-top:14px;">emails envoyés / jour</p>
+      <p class="dim" style="font-size:0.85rem;">Newsletters · alertes emploi · transactionnels</p>
+    </div>
+    <div class="bento amber" style="text-align:center;">
+      <div class="kpi-big gradient-warn">1 000</div>
+      <p class="muted" style="margin-top:14px;">bounces reçus / jour</p>
+      <p class="dim" style="font-size:0.85rem;">NPAI · boîtes pleines · congés · changements…</p>
+    </div>
+    <div class="bento" style="text-align:center; border-color:rgba(239,68,68,0.3);">
+      <div class="kpi-big" style="color:#f87171;">0</div>
+      <p class="muted" style="margin-top:14px;">traité automatiquement</p>
+      <p class="dim" style="font-size:0.85rem;">Personne n'a le temps de les lire</p>
+    </div>
+  </div>
+
+  <div style="margin-top:55px;">
+    <div class="quote">
+      Résultat : <strong>réputation email dégradée</strong>, coût SMTP gaspillé,
+      base d'abonnés périmée, risque de blacklisting Gmail / Yahoo.
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 3 -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#34d399;">NOTRE SOLUTION</p>
+  <h2>Un pipeline 100% automatique</h2>
+
+  <div style="margin-top:30px;">
+    <ul class="clean">
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Lit</strong> la BAL bounces en temps réel (Postfix) ou en cron IMAP</li>
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Classifie</strong> avec un moteur hybride <em>règles + Claude Haiku</em></li>
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Historise</strong> les soft bounces cross-jours (anti-spam)</li>
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Génère</strong> 3 CSV : <code>to_delete</code>, <code>to_pause</code>, <code>to_modify</code></li>
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Envoie</strong> le rapport quotidien + <em>push direct au CMS</em></li>
+      <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+        <strong>Alerte</strong> sur Slack en cas d'anomalie</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================================================================== 4 : Architecture -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">ARCHITECTURE</p>
+  <h2>Pipeline en 7 étapes</h2>
+
+  <div style="display:flex; flex-direction:column; gap:14px; margin-top:30px;">
+
+    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">cloud_download</span></div>
+      <div>
+        <strong>1. Poller IMAP</strong> · lecture UNSEEN, déplacement vers Processed
+        <div class="dim" style="font-size:0.85rem;">Gandi · OVH · Office 365</div>
+      </div>
+    </div>
+
+    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">filter_alt</span></div>
+      <div>
+        <strong>2. Detector + Parser</strong> · distinction bounce/contact, extraction MIME + DSN (RFC 3464)
+      </div>
+    </div>
+
+    <div class="bento blue" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">settings</span></div>
+      <div>
+        <strong>3. Rules Engine</strong> · regex + codes SMTP · <em>~85% des cas résolus ici</em>
+      </div>
+    </div>
+
+    <div class="bento violet" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-violet">smart_toy</span></div>
+      <div>
+        <strong>4. LLM Claude Haiku</strong> · fallback quand confiance &lt; 0.80
+        <div class="dim" style="font-size:0.85rem;">Suggère aussi des regex à apprendre</div>
+      </div>
+    </div>
+
+    <div class="bento green" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-green">database</span></div>
+      <div>
+        <strong>5. SQLite</strong> · 5 tables · anti-doublon · backup hebdo automatique
+      </div>
+    </div>
+
+    <div class="bento amber" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-amber">description</span></div>
+      <div>
+        <strong>6. CSV Exporter + SMTP</strong> · 3 CSV + envoi mail quotidien
+      </div>
+    </div>
+
+    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px; border-color:rgba(96,165,250,0.4);">
+      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">webhook</span></div>
+      <div>
+        <strong>7. Webhook CMS + Slack Alerts</strong> · intégration no-touch + alertes opérationnelles
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================================================================== 5 : Demo callout -->
+<section data-background-color="#0a0a14">
+  <div style="text-align:center; padding-top:60px;">
+    <div class="feature-icon" style="width:90px; height:90px; margin:0 auto 30px;">
+      <span class="mi" style="font-size:50px;">live_tv</span>
+    </div>
+    <h1 style="font-size:5rem;">DÉMO LIVE</h1>
+    <p class="muted" style="font-size:1.4rem; margin-top:20px;">
+      On a déjà testé l'outil sur la <strong style="color:#fafafa;">vraie BAL</strong>
+      <code style="font-size:1.2rem;">hackathon@cogiterra.fr</code>
+    </p>
+    <div style="margin-top:60px;">
+      <span class="badge badge-ok"><span class="pulse"></span>Pipeline en production</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 6 : Résultats réels -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#34d399;">RÉSULTATS RÉELS · 258 EMAILS COGITERRA</p>
+  <h2>99.6% de classification réussie</h2>
+
+  <div class="grid-4" style="margin-top:35px;">
+    <div class="bento" style="text-align:center;">
+      <div class="kpi-mid gradient-text">258</div>
+      <p class="kpi-label">emails lus</p>
+    </div>
+    <div class="bento" style="text-align:center;">
+      <div class="kpi-mid" style="color:#34d399;">194</div>
+      <p class="kpi-label">bounces traités</p>
+    </div>
+    <div class="bento" style="text-align:center;">
+      <div class="kpi-mid" style="color:#60a5fa;">6</div>
+      <p class="kpi-label">contacts forwardés</p>
+    </div>
+    <div class="bento" style="text-align:center;">
+      <div class="kpi-mid gradient-green">99.6%</div>
+      <p class="kpi-label">classification</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:50px; margin-bottom:14px;">Répartition de classification</h3>
+
+  <div style="margin-top:10px;">
+    <div style="display:flex; justify-content:space-between;">
+      <span><span class="mi mi-red">error</span>&nbsp;Hard bounces (à supprimer)</span>
+      <strong style="color:#f87171;">65</strong>
+    </div>
+    <div class="bar"><div class="bar-fill" style="width:33%; background:#ef4444;"></div></div>
+
+    <div style="display:flex; justify-content:space-between;">
+      <span><span class="mi mi-amber">schedule</span>&nbsp;Soft bounces (temporaires)</span>
+      <strong style="color:#fbbf24;">59</strong>
+    </div>
+    <div class="bar"><div class="bar-fill" style="width:30%; background:#f59e0b;"></div></div>
+
+    <div style="display:flex; justify-content:space-between;">
+      <span><span class="mi mi-violet">build</span>&nbsp;Erreurs techniques</span>
+      <strong style="color:#c084fc;">69</strong>
+    </div>
+    <div class="bar"><div class="bar-fill" style="width:35%; background:#a855f7;"></div></div>
+
+    <div style="display:flex; justify-content:space-between;">
+      <span><span class="mi">help</span>&nbsp;Non classifiés (traitement manuel)</span>
+      <strong>1</strong>
+    </div>
+    <div class="bar"><div class="bar-fill" style="width:1%; background:#64748b;"></div></div>
+  </div>
+</section>
+
+<!-- ================================================================== 7 : WOW #1 Self-improving -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#c084fc;">WOW FEATURE · 1 / 3</p>
+  <h2><span class="mi mi-violet" style="font-size:2.6rem;">smart_toy</span>&nbsp;
+      Self-improving rules</h2>
+  <p class="muted" style="font-size:1.25rem; margin-top:10px;">
+    Le LLM apprend au système à se passer de lui.
+  </p>
+
+  <div class="grid-2" style="margin-top:30px;">
+    <div class="bento violet">
+      <p class="kpi-label" style="color:#c084fc;">Mécanique</p>
+      <ul class="clean" style="margin-top:10px;">
+        <li><strong>1.</strong> Bounce ambigu → le LLM est appelé</li>
+        <li><strong>2.</strong> Il classe ET propose une regex générique</li>
+        <li><strong>3.</strong> La regex va dans <code>rule_suggestions</code></li>
+        <li><strong>4.</strong> Tu cliques <strong style="color:#34d399;">Adopter</strong> sur le dashboard</li>
+        <li><strong>5.</strong> Bounces similaires → matchés par règles → <strong>0 appel LLM</strong></li>
+      </ul>
+    </div>
+    <div class="bento blue">
+      <p class="kpi-label" style="color:#60a5fa;">Pourquoi c'est unique</p>
+      <ul class="clean" style="margin-top:10px;">
+        <li><span class="mi mi-green">trending_down</span>&nbsp;
+          Coût LLM <strong>diminue avec le temps</strong></li>
+        <li><span class="mi mi-green">speed</span>&nbsp;
+          Pipeline <strong>plus rapide</strong> (règles = µs, LLM = secondes)</li>
+        <li><span class="mi mi-green">verified</span>&nbsp;
+          Maintenance facile (rules versionnées en JSON)</li>
+        <li><span class="mi mi-green">handshake</span>&nbsp;
+          L'humain garde le contrôle (validation avant adoption)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 8 : WOW #2 Webhook -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#60a5fa;">WOW FEATURE · 2 / 3</p>
+  <h2><span class="mi" style="font-size:2.6rem;">webhook</span>&nbsp;
+      Webhook direct au CMS</h2>
+  <p class="muted" style="font-size:1.25rem; margin-top:10px;">
+    Plus besoin d'importer les CSV manuellement.
+  </p>
+
+  <div class="arrow-flow" style="margin-top:30px; font-size:1.4rem;">
+    <span class="from"><span class="mi mi-red">person</span> Webmaster</span>
+    <span class="dim">ouvre mail → télécharge → importe</span>
+    <span class="mi mi-red">arrow_forward</span>
+    <span class="to"><span class="mi mi-green">flash_on</span> Automatique</span>
+  </div>
+
+  <div class="grid-2" style="margin-top:30px;">
+    <div class="bento blue">
+      <p class="kpi-label" style="color:#60a5fa;">Comment ça marche</p>
+      <pre style="margin-top:8px;"><code class="language-http" style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.06); display:block;">POST {WEBHOOK_URL}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "report_date": "2026-05-22",
+  "total": 194,
+  "to_delete": [...],
+  "to_pause":  [...],
+  "to_modify": [...]
+}</code></pre>
+    </div>
+    <div class="bento">
+      <p class="kpi-label">Bénéfices</p>
+      <ul class="clean" style="margin-top:10px;">
+        <li><span class="mi mi-green">check_circle</span>&nbsp;
+          Intégration <strong>en 5 min côté CMS</strong> (endpoint PHP)</li>
+        <li><span class="mi mi-green">check_circle</span>&nbsp;
+          Sécurisé via <strong>Bearer token</strong></li>
+        <li><span class="mi mi-green">check_circle</span>&nbsp;
+          <strong>Fallback CSV</strong> si webhook indisponible</li>
+        <li><span class="mi mi-green">check_circle</span>&nbsp;
+          Vrai pipeline <strong>no-touch</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 9 : WOW #3 Slack -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#34d399;">WOW FEATURE · 3 / 3</p>
+  <h2><span class="mi mi-fill" style="font-size:2.6rem; color:#f87171;">notifications_active</span>&nbsp;
+      Alertes Slack sur anomalies</h2>
+  <p class="muted" style="font-size:1.25rem; margin-top:10px;">
+    Cogiterra peut dormir. Le système les réveille si problème.
+  </p>
+
+  <div class="grid-3" style="margin-top:35px;">
+    <div class="bento" style="text-align:center; border-color:rgba(245,158,11,0.3);">
+      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-amber">trending_up</span></div>
+      <h3 style="color:#fbbf24;">Pic anormal</h3>
+      <p class="dim" style="font-size:0.9rem;">Volume aujourd'hui &gt; 2× la moyenne 7 jours</p>
+    </div>
+    <div class="bento" style="text-align:center; border-color:rgba(239,68,68,0.3);">
+      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-red">dangerous</span></div>
+      <h3 style="color:#f87171;">Taux hard élevé</h3>
+      <p class="dim" style="font-size:0.9rem;">Plus de 75% de hard bounces sur la journée</p>
+    </div>
+    <div class="bento" style="text-align:center; border-color:rgba(168,85,247,0.3);">
+      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-violet">help_outline</span></div>
+      <h3 style="color:#c084fc;">Trop d'inconnus</h3>
+      <p class="dim" style="font-size:0.9rem;">Plus de 20% non classifiés (format nouveau)</p>
+    </div>
+  </div>
+
+  <div class="bento" style="margin-top:30px; background:rgba(75,46,131,0.15); border-color:rgba(168,85,247,0.3);">
+    <p class="dim" style="margin-bottom:8px; font-size:0.85rem;">Exemple de message Slack</p>
+    <pre style="background:transparent; border:none; padding:0;"><code style="background:transparent; color:#e2e8f0;">🚨 Alerte Cogiterra Bounces — 2026-05-22
+
+  • 📈 Pic de bounces : 420 aujourd'hui vs 195 en moyenne (×2.2)
+  • 🔴 Taux hard élevé : 82% des bounces
+
+Détail du jour :
+  • Total : 420 · Hard : 345 · Soft : 70
+  • Moyenne 7j : 195</code></pre>
+  </div>
+</section>
+
+<!-- ================================================================== 10 : Dashboard -->
+<section data-background-color="#0a0a14">
+  <p class="kpi-label">DASHBOARD</p>
+  <h2>Operations Center en temps réel</h2>
+
+  <div class="grid-2" style="margin-top:25px;">
+    <div>
+      <ul class="clean">
+        <li><span class="mi">dashboard</span>&nbsp;&nbsp;
+          <strong>Vue d'ensemble</strong> · KPIs, distribution, top domaines</li>
+        <li><span class="mi">today</span>&nbsp;&nbsp;
+          <strong>Aujourd'hui</strong> · filtres temps réel + export CSV</li>
+        <li><span class="mi">visibility</span>&nbsp;&nbsp;
+          <strong>Surveillance</strong> · soft bounces cross-jours</li>
+        <li><span class="mi">trending_up</span>&nbsp;&nbsp;
+          <strong>Historique 30j</strong> · évolution + performance classifier</li>
+        <li><span class="mi">bolt</span>&nbsp;&nbsp;
+          <strong>Activité live</strong> · feed temps réel</li>
+        <li><span class="mi mi-violet">smart_toy</span>&nbsp;&nbsp;
+          <strong>Règles suggérées</strong> · adopter/rejeter en un clic</li>
+        <li><span class="mi">database</span>&nbsp;&nbsp;
+          <strong>Données</strong> · exploration SQLite</li>
+      </ul>
+    </div>
+    <div class="bento" style="text-align:center;">
+      <div class="feature-icon" style="margin:0 auto 20px; width:80px; height:80px;">
+        <span class="mi" style="font-size:42px;">monitor_heart</span>
+      </div>
+      <h3>Email Health Score</h3>
+      <div class="kpi-big gradient-green" style="margin-top:14px;">87<span style="font-size:1.5rem; color:#71717a;">/100</span></div>
+      <p class="dim" style="margin-top:12px; font-size:0.9rem;">
+        Score calculé sur les bounces, surveillance et inconnus.
+      </p>
+      <span class="badge badge-ok" style="margin-top:14px;">Excellent</span>
+    </div>
+  </div>
+
+  <p class="dim center" style="margin-top:30px; font-size:0.9rem;">
+    Design 2026 · bento grid · glassmorphism · Material Symbols · animations
+  </p>
+</section>
+
+<!-- ================================================================== 11 : Tech stack -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">TECH STACK</p>
+  <h2>Choix techniques justifiés</h2>
+
+  <div class="grid-2" style="margin-top:30px;">
+    <div class="bento">
+      <h3><span class="mi">code</span>&nbsp;&nbsp;Backend</h3>
+      <p style="margin-top:14px;">
+        <span class="chip"><strong>Python</strong> 3.11+</span>
+        <span class="chip"><strong>SQLite</strong></span>
+        <span class="chip"><strong>imapclient</strong></span>
+        <span class="chip"><strong>mail-parser</strong></span>
+        <span class="chip"><strong>smtplib</strong></span>
+      </p>
+      <p class="dim" style="font-size:0.85rem;">
+        Pas de Docker requis · déploiement en 5 min sur le serveur Cogiterra
+      </p>
+    </div>
+    <div class="bento violet">
+      <h3><span class="mi mi-violet">smart_toy</span>&nbsp;&nbsp;Intelligence</h3>
+      <p style="margin-top:14px;">
+        <span class="chip"><strong>Anthropic Claude Haiku 4.5</strong></span>
+        <span class="chip"><strong>OpenAI</strong> compatible</span>
+        <span class="chip"><strong>Regex</strong> + RFC 3463</span>
+      </p>
+      <p class="dim" style="font-size:0.85rem;">
+        LLM en fallback uniquement → coût minimal · règles éditables sans dev
+      </p>
+    </div>
+    <div class="bento blue">
+      <h3><span class="mi">monitor</span>&nbsp;&nbsp;Frontend</h3>
+      <p style="margin-top:14px;">
+        <span class="chip"><strong>Streamlit</strong></span>
+        <span class="chip"><strong>Plotly</strong></span>
+        <span class="chip"><strong>Material Symbols</strong></span>
+        <span class="chip"><strong>Inter</strong> font</span>
+      </p>
+      <p class="dim" style="font-size:0.85rem;">
+        Tableau de bord interactif · déployable en SaaS
+      </p>
+    </div>
+    <div class="bento green">
+      <h3><span class="mi mi-green">verified</span>&nbsp;&nbsp;Qualité</h3>
+      <p style="margin-top:14px;">
+        <span class="chip"><strong>36</strong> tests pytest</span>
+        <span class="chip"><strong>colorlog</strong></span>
+        <span class="chip"><strong>RotatingFileHandler</strong></span>
+        <span class="chip"><strong>Backup</strong> hebdo auto</span>
+      </p>
+      <p class="dim" style="font-size:0.85rem;">
+        Tous tests verts en &lt; 0.2s · code production-ready
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 12 : ROI -->
+<section data-background-color="#07080f">
+  <p class="kpi-label" style="color:#34d399;">VALEUR MÉTIER</p>
+  <h2>Gains concrets pour Cogiterra</h2>
+
+  <div class="grid-3" style="margin-top:35px;">
+    <div class="bento green" style="text-align:center;">
+      <div class="kpi-mid gradient-green">100%</div>
+      <p class="kpi-label">tâche manuelle éliminée</p>
+      <p class="dim" style="font-size:0.85rem;">
+        Plus besoin de lire 1000 bounces/jour
+      </p>
+    </div>
+    <div class="bento blue" style="text-align:center;">
+      <div class="kpi-mid" style="color:#60a5fa;">+15%</div>
+      <p class="kpi-label">délivrabilité estimée</p>
+      <p class="dim" style="font-size:0.85rem;">
+        Base nettoyée = moins de spam, meilleur sender score
+      </p>
+    </div>
+    <div class="bento amber" style="text-align:center;">
+      <div class="kpi-mid" style="color:#fbbf24;">~25K€</div>
+      <p class="kpi-label">économisés / an</p>
+      <p class="dim" style="font-size:0.85rem;">
+        Temps RH + envois évités + protection réputation
+      </p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:50px;">Et surtout : maintenable par leur équipe</h3>
+  <ul class="clean">
+    <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+      Règles éditables en YAML/JSON (aucune ligne de code)</li>
+    <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+      Configuration via <code>.env</code> (admin friendly)</li>
+    <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+      Dashboard pour piloter / monitorer en un coup d'œil</li>
+    <li><span class="mi mi-green">check_circle</span>&nbsp;&nbsp;
+      Documentation complète (README + diagrammes Mermaid)</li>
+  </ul>
+</section>
+
+<!-- ================================================================== 13 : Pourquoi nous gagner -->
+<section data-background-color="#0a0a14">
+  <p class="kpi-label" style="color:#fbbf24;">POURQUOI CE PROJET</p>
+  <h2>Ce qui nous différencie</h2>
+
+  <div class="grid-2" style="margin-top:30px;">
+    <div class="bento">
+      <h3 style="color:#fafafa;"><span class="mi mi-green">check</span>&nbsp;Demandé par Cogiterra</h3>
+      <p style="margin-top:8px;">Connexion BAL · 3 CSV · classification hard/soft/change · soft threshold</p>
+    </div>
+    <div class="bento blue">
+      <h3 style="color:#fafafa;"><span class="mi">add_circle</span>&nbsp;Notre valeur ajoutée</h3>
+      <p style="margin-top:8px;">3 modes pipeline · LLM en fallback · forwarder · dashboard · 3 features WOW</p>
+    </div>
+    <div class="bento green">
+      <h3 style="color:#fafafa;"><span class="mi mi-green">verified</span>&nbsp;Production-ready</h3>
+      <p style="margin-top:8px;">36 tests · logs structurés · backup auto · sécurité Bearer · cron-ready</p>
+    </div>
+    <div class="bento violet">
+      <h3 style="color:#fafafa;"><span class="mi mi-violet">live_tv</span>&nbsp;Testé en vrai</h3>
+      <p style="margin-top:8px;">258 emails Cogiterra traités · 99.6% de classification réelle</p>
+    </div>
+  </div>
+
+  <div class="quote" style="margin-top:40px;">
+    Tout ce qu'on présente, on l'a déjà fait tourner sur <strong>leur vraie BAL</strong>.
+    Ce n'est pas une démo. C'est <strong>un produit</strong>.
+  </div>
+</section>
+
+<!-- ================================================================== 14 : Roadmap -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">ROADMAP</p>
+  <h2>Si Cogiterra adopte le projet</h2>
+
+  <div class="grid-2" style="margin-top:30px;">
+    <div class="bento">
+      <h3><span class="mi">flag</span>&nbsp;&nbsp;Semaine 1</h3>
+      <ul class="clean" style="margin-top:6px;">
+        <li>Déploiement sur leur serveur de prod</li>
+        <li>Branchement Postfix temps réel</li>
+        <li>Premier rapport quotidien</li>
+      </ul>
+    </div>
+    <div class="bento blue">
+      <h3><span class="mi">rocket_launch</span>&nbsp;&nbsp;Mois 1</h3>
+      <ul class="clean" style="margin-top:6px;">
+        <li>Endpoint webhook sur leur CMS PHP</li>
+        <li>Slack workspace branché</li>
+        <li>5–10 règles apprises adoptées</li>
+      </ul>
+    </div>
+    <div class="bento violet">
+      <h3><span class="mi mi-violet">trending_up</span>&nbsp;&nbsp;Trimestre 1</h3>
+      <ul class="clean" style="margin-top:6px;">
+        <li>Détection anomalies par domaine</li>
+        <li>Export Parquet pour la BI</li>
+        <li>Intégration Sender Score</li>
+      </ul>
+    </div>
+    <div class="bento green">
+      <h3><span class="mi mi-green">groups</span>&nbsp;&nbsp;Année 1</h3>
+      <ul class="clean" style="margin-top:6px;">
+        <li>Multi-tenant (plusieurs clients)</li>
+        <li>Mode SaaS pour autres éditeurs</li>
+        <li>Self-improving sur des langues étendues</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================== 15 : Thanks -->
+<section data-background-color="#07080f">
+  <div class="title-hero">
+    <img src="../../dashboard/assets/cogiterra_logo.png" class="logo" style="width:120px; margin-bottom:30px;" alt="Cogiterra"/>
+
+    <h1 class="gradient-text" style="font-size:7rem;">Merci.</h1>
+
+    <h3 style="color:#94a3b8; font-weight:500; max-width:800px; margin:30px auto; line-height:1.5;">
+      Cogiterra Bounces · Pipeline intelligent de traitement des emails en échec
+    </h3>
+
+    <div style="margin-top:50px;">
+      <span class="badge badge-info"><span class="mi" style="font-size:14px;">code</span>&nbsp;&nbsp;
+        github.com/MOUADx4/cogiterra_project</span>
+    </div>
+
+    <p style="margin-top:50px; color:#71717a; font-size:1rem;">
+      <strong style="color:#fafafa;">Questions ?</strong>
+    </p>
+
+    <div style="margin-top:30px;">
+      <span class="pulse"></span>
+      <span style="color:#34d399; font-weight:600;">Système en production</span>
+    </div>
+  </div>
+</section>
+
+</div></div>
+
+<!-- reveal.js -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+
+<script>
+Reveal.initialize({
+  hash: true,
+  controls: true,
+  controlsTutorial: false,
+  progress: true,
+  slideNumber: 'c/t',
+  history: true,
+  center: false,
+  transition: 'slide',
+  transitionSpeed: 'default',
+  backgroundTransition: 'fade',
+  width: 1280,
+  height: 760,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0,
+  plugins: [ RevealHighlight ],
+});
+</script>
+</body>
+</html>
