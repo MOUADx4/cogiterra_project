@@ -61,36 +61,36 @@ html, body, .reveal {
 
 .reveal .slides > section, .reveal .slides > section > section {
   text-align: left;
-  padding: 30px 50px;
+  padding: 22px 36px;
 }
 
 /* Typography */
 .reveal h1 {
-  font-size: 4.5rem;
+  font-size: 3.6rem;
   font-weight: 900;
   letter-spacing: -0.04em;
   background: linear-gradient(135deg, #fafafa 0%, #94a3b8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.35em;
   text-shadow: none;
 }
 .reveal h2 {
-  font-size: 2.6rem;
+  font-size: 2.1rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #fafafa;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.4em;
   text-shadow: none;
 }
 .reveal h3 {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #e2e8f0;
   text-shadow: none;
 }
-.reveal p, .reveal li { color: #cbd5e1; font-size: 1.15rem; line-height: 1.6; }
+.reveal p, .reveal li { color: #cbd5e1; font-size: 1rem; line-height: 1.5; }
 .reveal strong, .reveal b { color: #fafafa; }
 .reveal em { color: #a1a1aa; font-style: normal; font-size: 0.95em; }
 .reveal code {
@@ -161,8 +161,8 @@ html, body, .reveal {
   background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,255,255,0.09);
   backdrop-filter: blur(20px);
-  padding: 28px;
-  border-radius: 22px;
+  padding: 20px;
+  border-radius: 18px;
   box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
 }
 .bento.violet { border-color: rgba(168,85,247,0.25); }
@@ -171,14 +171,14 @@ html, body, .reveal {
 .bento.amber  { border-color: rgba(245,158,11,0.25); }
 
 /* Grid */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
 /* KPI big */
-.kpi-big { font-size: 5.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
-.kpi-mid { font-size: 3.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
-.kpi-label { color: var(--dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+.kpi-big { font-size: 4.4rem; font-weight: 900; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.kpi-mid { font-size: 2.4rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi-label { color: var(--dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
 
 /* Highlight gradient text */
 .gradient-text {
@@ -216,20 +216,21 @@ html, body, .reveal {
 
 .feature-icon {
   display: inline-flex;
-  width: 56px; height: 56px;
+  width: 42px; height: 42px;
   align-items: center; justify-content: center;
-  border-radius: 14px;
+  border-radius: 11px;
   background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(168,85,247,0.10));
   border: 1px solid rgba(255,255,255,0.1);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
 }
-.feature-icon .mi { font-size: 32px; color: #60a5fa; }
+.feature-icon .mi { font-size: 24px; color: #60a5fa; }
 
 ul.clean { list-style: none; padding: 0; }
 ul.clean li {
-  padding: 10px 0;
+  padding: 7px 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
 }
 ul.clean li:last-child { border-bottom: 0; }
 
@@ -315,7 +316,7 @@ ul.clean li:last-child { border-bottom: 0; }
       <span class="badge badge-violet">Pour Cogiterra Éditions</span>
     </div>
     <p style="margin-top:60px; color:#71717a; font-size:0.9rem; letter-spacing:0.1em;">
-      MOUAD &nbsp;·&nbsp; H3 NIGHT INNOVATHON &nbsp;·&nbsp; 21 mai 2026
+      GROUPE 3 &nbsp;·&nbsp; H3 NIGHT INNOVATHON &nbsp;·&nbsp; 21 mai 2026
     </p>
   </div>
 </section>
@@ -381,56 +382,70 @@ ul.clean li:last-child { border-bottom: 0; }
   <p class="kpi-label">ARCHITECTURE</p>
   <h2>Pipeline en 7 étapes</h2>
 
-  <div style="display:flex; flex-direction:column; gap:14px; margin-top:30px;">
+  <div style="display:flex; flex-direction:column; gap:7px; margin-top:14px;">
 
-    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">cloud_download</span></div>
-      <div>
+    <div class="bento" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi" style="font-size:20px;">cloud_download</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
         <strong>1. Poller IMAP</strong> · lecture UNSEEN, déplacement vers Processed
-        <div class="dim" style="font-size:0.85rem;">Gandi · OVH · Office 365</div>
+        <span class="dim" style="font-size:0.78rem; margin-left:6px;">Gandi · OVH · Office 365</span>
       </div>
     </div>
 
-    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">filter_alt</span></div>
-      <div>
-        <strong>2. Detector + Parser</strong> · distinction bounce/contact, extraction MIME + DSN (RFC 3464)
+    <div class="bento" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi" style="font-size:20px;">filter_alt</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
+        <strong>2. Detector + Parser</strong> · bounce vs contact, MIME + DSN (RFC 3464)
       </div>
     </div>
 
-    <div class="bento blue" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">settings</span></div>
-      <div>
-        <strong>3. Rules Engine</strong> · regex + codes SMTP · <em>~85% des cas résolus ici</em>
+    <div class="bento blue" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi" style="font-size:20px;">settings</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
+        <strong>3. Rules Engine</strong> · regex + codes SMTP · <em>~85% résolus ici</em>
       </div>
     </div>
 
-    <div class="bento violet" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-violet">smart_toy</span></div>
-      <div>
-        <strong>4. LLM Claude Haiku</strong> · fallback quand confiance &lt; 0.80
-        <div class="dim" style="font-size:0.85rem;">Suggère aussi des regex à apprendre</div>
+    <div class="bento violet" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi mi-violet" style="font-size:20px;">smart_toy</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
+        <strong>4. LLM Claude Haiku</strong> · fallback si confiance &lt; 0.80
+        <span class="dim" style="font-size:0.78rem; margin-left:6px;">Suggère aussi des regex à apprendre</span>
       </div>
     </div>
 
-    <div class="bento green" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-green">database</span></div>
-      <div>
-        <strong>5. SQLite</strong> · 5 tables · anti-doublon · backup hebdo automatique
+    <div class="bento green" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi mi-green" style="font-size:20px;">database</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
+        <strong>5. SQLite</strong> · 5 tables · anti-doublon · backup hebdo
       </div>
     </div>
 
-    <div class="bento amber" style="display:flex; align-items:center; gap:18px; padding:18px 24px;">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi mi-amber">description</span></div>
-      <div>
+    <div class="bento amber" style="display:flex; align-items:center; gap:14px; padding:8px 14px;">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi mi-amber" style="font-size:20px;">description</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
         <strong>6. CSV Exporter + SMTP</strong> · 3 CSV + envoi mail quotidien
       </div>
     </div>
 
-    <div class="bento" style="display:flex; align-items:center; gap:18px; padding:18px 24px; border-color:rgba(96,165,250,0.4);">
-      <div class="feature-icon" style="margin-bottom:0;"><span class="mi">webhook</span></div>
-      <div>
-        <strong>7. Webhook CMS + Slack Alerts</strong> · intégration no-touch + alertes opérationnelles
+    <div class="bento" style="display:flex; align-items:center; gap:14px; padding:8px 14px; border-color:rgba(96,165,250,0.4);">
+      <div class="feature-icon" style="margin-bottom:0; width:34px; height:34px;">
+        <span class="mi" style="font-size:20px;">webhook</span>
+      </div>
+      <div style="font-size:0.92rem; line-height:1.35;">
+        <strong>7. Webhook CMS + Slack Alerts</strong> · intégration no-touch + alertes
       </div>
     </div>
 
@@ -459,47 +474,47 @@ ul.clean li:last-child { border-bottom: 0; }
   <p class="kpi-label" style="color:#34d399;">RÉSULTATS RÉELS · 258 EMAILS COGITERRA</p>
   <h2>99.6% de classification réussie</h2>
 
-  <div class="grid-4" style="margin-top:35px;">
-    <div class="bento" style="text-align:center;">
+  <div class="grid-4" style="margin-top:16px;">
+    <div class="bento" style="text-align:center; padding:14px;">
       <div class="kpi-mid gradient-text">258</div>
-      <p class="kpi-label">emails lus</p>
+      <p class="kpi-label" style="margin-top:4px;">emails lus</p>
     </div>
-    <div class="bento" style="text-align:center;">
+    <div class="bento" style="text-align:center; padding:14px;">
       <div class="kpi-mid" style="color:#34d399;">194</div>
-      <p class="kpi-label">bounces traités</p>
+      <p class="kpi-label" style="margin-top:4px;">bounces traités</p>
     </div>
-    <div class="bento" style="text-align:center;">
+    <div class="bento" style="text-align:center; padding:14px;">
       <div class="kpi-mid" style="color:#60a5fa;">6</div>
-      <p class="kpi-label">contacts forwardés</p>
+      <p class="kpi-label" style="margin-top:4px;">contacts forwardés</p>
     </div>
-    <div class="bento" style="text-align:center;">
+    <div class="bento" style="text-align:center; padding:14px;">
       <div class="kpi-mid gradient-green">99.6%</div>
-      <p class="kpi-label">classification</p>
+      <p class="kpi-label" style="margin-top:4px;">classification</p>
     </div>
   </div>
 
-  <h3 style="margin-top:50px; margin-bottom:14px;">Répartition de classification</h3>
+  <h3 style="margin-top:22px; margin-bottom:8px;">Répartition de classification</h3>
 
-  <div style="margin-top:10px;">
-    <div style="display:flex; justify-content:space-between;">
+  <div style="margin-top:4px; font-size:0.92rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
       <span><span class="mi mi-red">error</span>&nbsp;Hard bounces (à supprimer)</span>
       <strong style="color:#f87171;">65</strong>
     </div>
     <div class="bar"><div class="bar-fill" style="width:33%; background:#ef4444;"></div></div>
 
-    <div style="display:flex; justify-content:space-between;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
       <span><span class="mi mi-amber">schedule</span>&nbsp;Soft bounces (temporaires)</span>
       <strong style="color:#fbbf24;">59</strong>
     </div>
     <div class="bar"><div class="bar-fill" style="width:30%; background:#f59e0b;"></div></div>
 
-    <div style="display:flex; justify-content:space-between;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
       <span><span class="mi mi-violet">build</span>&nbsp;Erreurs techniques</span>
       <strong style="color:#c084fc;">69</strong>
     </div>
     <div class="bar"><div class="bar-fill" style="width:35%; background:#a855f7;"></div></div>
 
-    <div style="display:flex; justify-content:space-between;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
       <span><span class="mi">help</span>&nbsp;Non classifiés (traitement manuel)</span>
       <strong>1</strong>
     </div>
@@ -593,40 +608,38 @@ Content-Type: application/json
 <!-- ================================================================== 9 : WOW #3 Slack -->
 <section data-background-color="#07080f">
   <p class="kpi-label" style="color:#34d399;">WOW FEATURE · 3 / 3</p>
-  <h2><span class="mi mi-fill" style="font-size:2.6rem; color:#f87171;">notifications_active</span>&nbsp;
+  <h2><span class="mi mi-fill" style="font-size:1.9rem; color:#f87171;">notifications_active</span>&nbsp;
       Alertes Slack sur anomalies</h2>
-  <p class="muted" style="font-size:1.25rem; margin-top:10px;">
+  <p class="muted" style="font-size:1rem; margin-top:4px;">
     Cogiterra peut dormir. Le système les réveille si problème.
   </p>
 
-  <div class="grid-3" style="margin-top:35px;">
-    <div class="bento" style="text-align:center; border-color:rgba(245,158,11,0.3);">
-      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-amber">trending_up</span></div>
-      <h3 style="color:#fbbf24;">Pic anormal</h3>
-      <p class="dim" style="font-size:0.9rem;">Volume aujourd'hui &gt; 2× la moyenne 7 jours</p>
+  <div class="grid-3" style="margin-top:14px;">
+    <div class="bento" style="text-align:center; border-color:rgba(245,158,11,0.3); padding:14px;">
+      <div class="feature-icon" style="margin:0 auto 8px;"><span class="mi mi-amber">trending_up</span></div>
+      <h3 style="color:#fbbf24; font-size:1.1rem;">Pic anormal</h3>
+      <p class="dim" style="font-size:0.78rem; line-height:1.4;">Volume &gt; 2× moyenne 7 jours</p>
     </div>
-    <div class="bento" style="text-align:center; border-color:rgba(239,68,68,0.3);">
-      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-red">dangerous</span></div>
-      <h3 style="color:#f87171;">Taux hard élevé</h3>
-      <p class="dim" style="font-size:0.9rem;">Plus de 75% de hard bounces sur la journée</p>
+    <div class="bento" style="text-align:center; border-color:rgba(239,68,68,0.3); padding:14px;">
+      <div class="feature-icon" style="margin:0 auto 8px;"><span class="mi mi-red">dangerous</span></div>
+      <h3 style="color:#f87171; font-size:1.1rem;">Taux hard élevé</h3>
+      <p class="dim" style="font-size:0.78rem; line-height:1.4;">Plus de 75% de hard bounces</p>
     </div>
-    <div class="bento" style="text-align:center; border-color:rgba(168,85,247,0.3);">
-      <div class="feature-icon" style="margin:0 auto 14px;"><span class="mi mi-violet">help_outline</span></div>
-      <h3 style="color:#c084fc;">Trop d'inconnus</h3>
-      <p class="dim" style="font-size:0.9rem;">Plus de 20% non classifiés (format nouveau)</p>
+    <div class="bento" style="text-align:center; border-color:rgba(168,85,247,0.3); padding:14px;">
+      <div class="feature-icon" style="margin:0 auto 8px;"><span class="mi mi-violet">help_outline</span></div>
+      <h3 style="color:#c084fc; font-size:1.1rem;">Trop d'inconnus</h3>
+      <p class="dim" style="font-size:0.78rem; line-height:1.4;">Plus de 20% non classifiés</p>
     </div>
   </div>
 
-  <div class="bento" style="margin-top:30px; background:rgba(75,46,131,0.15); border-color:rgba(168,85,247,0.3);">
-    <p class="dim" style="margin-bottom:8px; font-size:0.85rem;">Exemple de message Slack</p>
-    <pre style="background:transparent; border:none; padding:0;"><code style="background:transparent; color:#e2e8f0;">🚨 Alerte Cogiterra Bounces — 2026-05-22
+  <div class="bento" style="margin-top:14px; padding:14px 18px; background:rgba(75,46,131,0.15); border-color:rgba(168,85,247,0.3);">
+    <p class="dim" style="margin:0 0 6px 0; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;">Exemple de message Slack</p>
+    <pre style="background:transparent; border:none; padding:0; margin:0;"><code style="background:transparent; color:#e2e8f0; font-size:0.78rem; line-height:1.4;">🚨 Alerte Cogiterra Bounces — 2026-05-22
 
   • 📈 Pic de bounces : 420 aujourd'hui vs 195 en moyenne (×2.2)
   • 🔴 Taux hard élevé : 82% des bounces
 
-Détail du jour :
-  • Total : 420 · Hard : 345 · Soft : 70
-  • Moyenne 7j : 195</code></pre>
+Détail : Total 420 · Hard 345 · Soft 70 · Moyenne 7j 195</code></pre>
   </div>
 </section>
 
@@ -854,8 +867,8 @@ Détail du jour :
     </h3>
 
     <div style="margin-top:50px;">
-      <span class="badge badge-info"><span class="mi" style="font-size:14px;">code</span>&nbsp;&nbsp;
-        github.com/MOUADx4/cogiterra_project</span>
+      <span class="badge badge-info"><span class="mi" style="font-size:14px;">groups</span>&nbsp;&nbsp;
+        GROUPE 3 · H3 Hitema</span>
     </div>
 
     <p style="margin-top:50px; color:#71717a; font-size:1rem;">
