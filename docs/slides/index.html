@@ -628,32 +628,43 @@ flowchart LR
   <div class="diagram-wrap">
     <div class="mermaid">
 flowchart TB
-    A["📤 Envoi mail"]:::start --> B["📬 Réception<br/>fournisseur"]:::flow
-    B --> C{"⚠️ Erreur ?"}:::decision
-    C -.->|"non"| OK(("✅ delivered")):::ok
-    C -->|"oui"| E["📥 BAL bounces"]:::flow
+    A["Envoi mail"]:::start
+    B["Reception<br/>fournisseur"]:::flow
+    C{"Erreur SMTP ?"}:::decision
+    OK["delivered"]:::ok
+    E["BAL bounces"]:::flow
+    F{"Bounce ?"}:::decision
+    G["Forward<br/>BAL contact"]:::out
+    H["Parser MIME<br/>+ DSN"]:::flow
+    I{"Rules<br/>conf >= 0.80 ?"}:::decision
+    K["Claude<br/>Haiku 4.5"]:::ai
+    L{"LLM<br/>confiant ?"}:::decision
+    M["Categorise"]:::flow
+    N["unknown"]:::warn
+    O["rule_suggestions"]:::ai
+    P["Soft<br/>cross-jours"]:::flow
+    V[("SQLite")]:::db
+    W{"Anomalie ?"}:::decision
+    X["Alerte Slack"]:::alert
+    Y["3 CSV email"]:::out
+    Z["Webhook CMS"]:::out
 
-    E --> F{"🔍 Bounce ?"}:::decision
-    F -.->|"non"| G["📨 Forward<br/>BAL contact"]:::out
-    F -->|"oui"| H["📝 Parser MIME<br/>+ DSN"]:::flow
-
-    H --> I{"⚙️ Rules<br/>conf ≥ 0.80 ?"}:::decision
-    I -->|"oui (90%+)"| P["🧮 Soft<br/>cross-jours"]:::flow
-    I -.->|"non"| K["🤖 Claude<br/>Haiku 4.5"]:::ai
-
-    K --> L{"🎯 Confiant ?"}:::decision
-    L -->|"oui"| M["✅ Catégorisé"]:::flow
-    L -.->|"non"| N["❓ unknown"]:::warn
-    M --> P
-    N --> P
-    K -.->|"propose regex"| O["📚 rule_suggestions"]:::ai
+    A --> B --> C
+    C -.->|"non"| OK
+    C -->|"oui"| E --> F
+    F -.->|"non"| G
+    F -->|"oui"| H --> I
+    I -->|"oui (90%+)"| P
+    I -.->|"non"| K --> L
+    L -->|"oui"| M --> P
+    L -.->|"non"| N --> P
+    K -.->|"propose regex"| O
     O -. "adoption" .-> I
-
-    P --> V[("💾 SQLite")]:::db
-    V --> W{"🚨 Anomalie ?"}:::decision
-    W -.->|"oui"| X["📢 Alerte Slack"]:::alert
-    V --> Y["📎 3 CSV email"]:::out
-    V --> Z["🔗 Webhook CMS"]:::out
+    P --> V
+    V --> W
+    W -.->|"oui"| X
+    V --> Y
+    V --> Z
 
     classDef start fill:#065f46,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
     classDef flow fill:#1e293b,stroke:#94a3b8,color:#e5e7eb,stroke-width:1.5px
@@ -1138,8 +1149,9 @@ Reveal.initialize({
 <!-- Mermaid pour les schémas d'architecture -->
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
   mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false,  // on rend nous-mêmes (sinon les SVG sont rendus avec width=0 car les slides Reveal sont cachées)
     theme: 'dark',
     securityLevel: 'loose',
     themeVariables: {
@@ -1162,11 +1174,35 @@ Reveal.initialize({
       useMaxWidth: true
     }
   });
-  // Re-render si reveal change de slide (au cas où des nodes étaient cachés)
+
+  async function renderInSlide(slide) {
+    if (!slide) return;
+    const nodes = slide.querySelectorAll('.mermaid:not([data-processed="true"])');
+    if (!nodes.length) return;
+    try {
+      await mermaid.run({ nodes: Array.from(nodes) });
+    } catch (e) {
+      console.error('Mermaid render error:', e);
+    }
+  }
+
+  function bootRender() {
+    // Rendu de la slide actuelle (visible → dimensions correctes)
+    renderInSlide(Reveal.getCurrentSlide());
+    // Et on déclenche le rendu des autres au changement de slide
+  }
+
   if (window.Reveal) {
-    Reveal.on('slidechanged', () => {
-      const unrendered = document.querySelectorAll('.mermaid:not([data-processed="true"])');
-      if (unrendered.length) mermaid.run({ nodes: unrendered });
+    if (Reveal.isReady && Reveal.isReady()) {
+      bootRender();
+    } else {
+      Reveal.on('ready', bootRender);
+    }
+    Reveal.on('slidechanged', (e) => renderInSlide(e.currentSlide));
+  } else {
+    // Fallback si Reveal pas dispo
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal section').forEach(renderInSlide);
     });
   }
 </script>
