@@ -290,6 +290,52 @@ ul.clean li:last-child { border-bottom: 0; }
   line-height: 1.5;
 }
 
+/* === Schémas Mermaid === */
+.diagram-wrap {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px 22px;
+  margin-top: 14px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7);
+  max-height: 560px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.diagram-wrap .mermaid {
+  width: 100%;
+  text-align: center;
+  font-family: 'Inter', sans-serif !important;
+}
+.diagram-wrap .mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 540px !important;
+}
+.diagram-legend {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 12px; justify-content: center;
+  font-size: 0.75rem; color: var(--muted);
+}
+.diagram-legend .chip {
+  padding: 5px 12px; font-size: 0.74rem;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0;
+}
+.diagram-legend .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  display: inline-block;
+}
+.dot-in    { background: #60a5fa; }
+.dot-core  { background: #a78bfa; }
+.dot-ai    { background: #f472b6; }
+.dot-store { background: #34d399; }
+.dot-out   { background: #fbbf24; }
+.dot-alert { background: #fb7185; }
+
 </style>
 </head>
 <body>
@@ -449,6 +495,185 @@ ul.clean li:last-child { border-bottom: 0; }
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ================================================================== 4a : Schéma 1 - Architecture globale -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">SCHÉMA · 1 / 3</p>
+  <h2>Architecture globale dans l'infra Cogiterra</h2>
+
+  <div class="diagram-wrap">
+    <div class="mermaid">
+flowchart LR
+    MC["📧 Mail client<br/>externe"]:::ext
+
+    subgraph COGI ["🏢 COGITERRA"]
+        direction TB
+        EX["📨 Exchange<br/>BAL bounces"]:::infra
+        subgraph SRV ["🖥️ Serveur de filtrage"]
+            direction TB
+            PF["⚙️ Postfix"]:::svc
+            PY["🐍 Pipeline<br/>Rules + LLM"]:::py
+            DB[("💾 SQLite")]:::db
+            DSH["📊 Dashboard"]:::ui
+        end
+    end
+
+    LLM["🤖 Claude<br/>Haiku 4.5"]:::ai
+    CMS["🔗 CMS<br/>webhook"]:::out
+    SLK["🚨 Slack<br/>alertes"]:::alert
+    CSV["📎 3 CSV<br/>quotidiens"]:::out
+
+    MC -->|"Bounce SMTP"| PF
+    MC -->|"IMAP"| EX
+    EX -->|"UNSEEN"| PY
+    PF -->|"stdin"| PY
+    PY -.->|"conf < 0.80"| LLM
+    LLM -.->|"cat + regex"| PY
+    PY --> DB
+    DB --> DSH
+    PY --> CSV
+    PY --> CMS
+    PY --> SLK
+    PY -.->|"contact"| EX
+
+    classDef ext fill:#1f2937,stroke:#475569,color:#e5e7eb,stroke-width:1.5px
+    classDef infra fill:#1e3a8a,stroke:#60a5fa,color:#dbeafe,stroke-width:1.5px
+    classDef svc fill:#312e81,stroke:#a78bfa,color:#ede9fe,stroke-width:1.5px
+    classDef py fill:#4c1d95,stroke:#c4b5fd,color:#f3e8ff,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef ui fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+    </div>
+  </div>
+
+  <div class="diagram-legend">
+    <span class="chip"><span class="dot dot-in"></span> Entrées Postfix / IMAP</span>
+    <span class="chip"><span class="dot dot-core"></span> Pipeline Python</span>
+    <span class="chip"><span class="dot dot-ai"></span> LLM fallback</span>
+    <span class="chip"><span class="dot dot-store"></span> SQLite + Dashboard</span>
+    <span class="chip"><span class="dot dot-out"></span> Sorties CSV / Webhook</span>
+    <span class="chip"><span class="dot dot-alert"></span> Alertes Slack</span>
+  </div>
+</section>
+
+<!-- ================================================================== 4b : Schéma 2 - Application interne -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">SCHÉMA · 2 / 3</p>
+  <h2>Détail du pipeline interne</h2>
+
+  <div class="diagram-wrap">
+    <div class="mermaid">
+flowchart LR
+    IN["📨 Exchange<br/>Cogiterra"]:::infra
+
+    subgraph APP ["📦 Application Python"]
+        direction TB
+        DET["🔍 Detector<br/>bounce vs contact"]:::py
+        PRS["📝 Parser<br/>MIME + DSN"]:::py
+        RUL{{"⚙️ Rules<br/>Engine"}}:::rules
+        LLM["🤖 Claude Haiku<br/>si conf < 0.80"]:::ai
+        CNT["🧮 Soft cross-jours"]:::py
+        DB[("💾 SQLite")]:::db
+        DSH["📊 Dashboard"]:::ui
+    end
+
+    OUT1["📎 3 CSV"]:::out
+    OUT2["🔗 Webhook CMS"]:::out
+    OUT3["🚨 Slack"]:::alert
+    FWD["📨 Forward<br/>contact"]:::infra
+
+    IN -->|"IMAP / stdin"| DET
+    DET -.->|"contact"| FWD
+    DET -->|"bounce"| PRS
+    PRS --> RUL
+    RUL -->|"conf ≥ 0.80"| CNT
+    RUL -.->|"conf < 0.80"| LLM
+    LLM --> CNT
+    LLM -. "self-improving" .-> RUL
+    CNT --> DB
+    DB --> DSH
+    DB --> OUT1
+    DB --> OUT2
+    DB --> OUT3
+
+    classDef infra fill:#1e3a8a,stroke:#60a5fa,color:#dbeafe,stroke-width:1.5px
+    classDef py fill:#4c1d95,stroke:#c4b5fd,color:#f3e8ff,stroke-width:1.5px
+    classDef rules fill:#1e40af,stroke:#93c5fd,color:#dbeafe,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef ui fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+    </div>
+  </div>
+
+  <div class="diagram-legend">
+    <span class="chip"><span class="dot dot-in"></span> Source mail</span>
+    <span class="chip"><span class="dot dot-core"></span> Étages pipeline</span>
+    <span class="chip"><span class="dot dot-ai"></span> LLM (≈10% des cas)</span>
+    <span class="chip"><span class="dot dot-store"></span> Storage + UI</span>
+    <span class="chip"><span class="dot dot-out"></span> Sorties</span>
+  </div>
+</section>
+
+<!-- ================================================================== 4c : Schéma 3 - Flowchart logique -->
+<section data-background-color="#07080f">
+  <p class="kpi-label">SCHÉMA · 3 / 3</p>
+  <h2>Flowchart logique de décision</h2>
+
+  <div class="diagram-wrap">
+    <div class="mermaid">
+flowchart TB
+    A["📤 Envoi mail"]:::start --> B["📬 Réception<br/>fournisseur"]:::flow
+    B --> C{"⚠️ Erreur ?"}:::decision
+    C -.->|"non"| OK(("✅ delivered")):::ok
+    C -->|"oui"| E["📥 BAL bounces"]:::flow
+
+    E --> F{"🔍 Bounce ?"}:::decision
+    F -.->|"non"| G["📨 Forward<br/>BAL contact"]:::out
+    F -->|"oui"| H["📝 Parser MIME<br/>+ DSN"]:::flow
+
+    H --> I{"⚙️ Rules<br/>conf ≥ 0.80 ?"}:::decision
+    I -->|"oui (90%+)"| P["🧮 Soft<br/>cross-jours"]:::flow
+    I -.->|"non"| K["🤖 Claude<br/>Haiku 4.5"]:::ai
+
+    K --> L{"🎯 Confiant ?"}:::decision
+    L -->|"oui"| M["✅ Catégorisé"]:::flow
+    L -.->|"non"| N["❓ unknown"]:::warn
+    M --> P
+    N --> P
+    K -.->|"propose regex"| O["📚 rule_suggestions"]:::ai
+    O -. "adoption" .-> I
+
+    P --> V[("💾 SQLite")]:::db
+    V --> W{"🚨 Anomalie ?"}:::decision
+    W -.->|"oui"| X["📢 Alerte Slack"]:::alert
+    V --> Y["📎 3 CSV email"]:::out
+    V --> Z["🔗 Webhook CMS"]:::out
+
+    classDef start fill:#065f46,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef flow fill:#1e293b,stroke:#94a3b8,color:#e5e7eb,stroke-width:1.5px
+    classDef decision fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+    classDef warn fill:#713f12,stroke:#facc15,color:#fef9c3,stroke-width:1.5px
+    classDef ok fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    </div>
+  </div>
+
+  <div class="diagram-legend">
+    <span class="chip"><span class="dot dot-store"></span> Départ / OK</span>
+    <span class="chip"><span class="dot dot-core"></span> Étape</span>
+    <span class="chip"><span class="dot" style="background:#fb923c;"></span> Décision</span>
+    <span class="chip"><span class="dot dot-ai"></span> LLM</span>
+    <span class="chip"><span class="dot dot-out"></span> Sortie</span>
+    <span class="chip"><span class="dot dot-alert"></span> Alerte</span>
   </div>
 </section>
 
@@ -908,6 +1133,42 @@ Reveal.initialize({
   maxScale: 2.0,
   plugins: [ RevealHighlight ],
 });
+</script>
+
+<!-- Mermaid pour les schémas d'architecture -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    securityLevel: 'loose',
+    themeVariables: {
+      background: 'transparent',
+      primaryColor: '#1f2937',
+      primaryTextColor: '#e5e7eb',
+      primaryBorderColor: '#475569',
+      lineColor: '#94a3b8',
+      secondaryColor: '#312e81',
+      tertiaryColor: '#1e293b',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      fontSize: '14px'
+    },
+    flowchart: {
+      curve: 'basis',
+      padding: 14,
+      nodeSpacing: 45,
+      rankSpacing: 55,
+      htmlLabels: true,
+      useMaxWidth: true
+    }
+  });
+  // Re-render si reveal change de slide (au cas où des nodes étaient cachés)
+  if (window.Reveal) {
+    Reveal.on('slidechanged', () => {
+      const unrendered = document.querySelectorAll('.mermaid:not([data-processed="true"])');
+      if (unrendered.length) mermaid.run({ nodes: unrendered });
+    });
+  }
 </script>
 </body>
 </html>

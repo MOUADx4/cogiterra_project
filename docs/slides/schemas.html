@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cogiterra Bounces — Schémas d'architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg-0:#0a0e1a;
+      --bg-1:#111827;
+      --bg-2:#1f2937;
+      --line:rgba(255,255,255,.08);
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#60a5fa;
+      --accent-2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg-0);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    body{
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(96,165,250,.15), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(167,139,250,.12), transparent 60%),
+        radial-gradient(800px 400px at 50% 120%, rgba(52,211,153,.08), transparent 60%),
+        var(--bg-0);
+      min-height:100vh;
+      padding:48px 24px 80px;
+    }
+    .wrap{max-width:1280px;margin:0 auto}
+    header{
+      text-align:center;margin-bottom:48px;
+    }
+    .eyebrow{
+      display:inline-block;
+      padding:6px 14px;border:1px solid var(--line);border-radius:999px;
+      font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+      backdrop-filter:blur(8px);background:rgba(255,255,255,.02);
+      margin-bottom:18px;
+    }
+    h1{
+      font-size:48px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px;
+      background:linear-gradient(120deg,#fff 0%,#a78bfa 50%,#60a5fa 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .subtitle{color:var(--muted);font-size:17px;max-width:680px;margin:0 auto}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:32px 28px 28px;
+      margin-bottom:36px;
+      box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
+      backdrop-filter:blur(10px);
+    }
+    .card-head{
+      display:flex;align-items:center;gap:14px;margin-bottom:8px;
+    }
+    .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:36px;height:36px;border-radius:10px;
+      font-weight:700;font-size:14px;
+      background:linear-gradient(135deg,rgba(96,165,250,.25),rgba(167,139,250,.25));
+      border:1px solid rgba(167,139,250,.35);color:#e9d5ff;
+    }
+    h2{font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em}
+    .card-sub{color:var(--muted);font-size:14px;margin:4px 0 18px}
+    .legend{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;font-size:12px;color:var(--muted);
+    }
+    .chip{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02)
+    }
+    .dot{width:8px;height:8px;border-radius:50%}
+    .dot.in{background:#60a5fa}
+    .dot.core{background:#a78bfa}
+    .dot.ai{background:#f472b6}
+    .dot.store{background:#34d399}
+    .dot.out{background:#fbbf24}
+    .dot.alert{background:#fb7185}
+
+    .mermaid{
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      overflow-x:auto;
+    }
+    footer{
+      text-align:center;color:var(--muted);font-size:13px;margin-top:24px;
+    }
+    footer code{font-family:'JetBrains Mono',monospace;color:#cbd5e1}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <span class="eyebrow">Cogiterra Bounces · Architecture</span>
+      <h1>Schémas d'architecture</h1>
+      <p class="subtitle">Trois vues du pipeline — de l'infra Cogiterra au flowchart de décision, version <strong>conforme</strong> au projet réel.</p>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- SCHÉMA 1 — ARCHITECTURE GLOBALE COGITERRA                    -->
+    <!-- ============================================================ -->
+    <section class="card">
+      <div class="card-head">
+        <div class="badge">01</div>
+        <h2>Architecture globale dans l'infra Cogiterra</h2>
+      </div>
+      <p class="card-sub">Où s'insère notre serveur de filtrage entre Internet, Postfix et le serveur Exchange interne.</p>
+
+      <div class="mermaid">
+flowchart LR
+    MC[" Mail client externe"]:::ext
+
+    subgraph COGI ["🏢 COGITERRA"]
+        direction LR
+        EX[" Serveur Exchange<br/>(BAL bounces + contacts)"]:::infra
+        subgraph SRV ["🖥️ Serveur de filtrage mail"]
+            direction TB
+            PF[" Postfix<br/>(mode pipe)"]:::svc
+            PY[" Pipeline Python<br/>Rules + LLM"]:::py
+            DB[(" SQLite")]:::db
+            DSH[" Dashboard<br/>Streamlit"]:::ui
+        end
+    end
+
+    LLM[" Claude Haiku 4.5<br/>(fallback API)"]:::ai
+    CMS[" CMS Cogiterra<br/>(webhook)"]:::out
+    SLK[" Slack<br/>(alertes)"]:::alert
+    CSV[" 3 CSV<br/>to_delete · to_pause · to_modify"]:::out
+
+    MC -- "Bounce SMTP" --> PF
+    MC -- "IMAP poll" --> EX
+    EX -- "IMAP UNSEEN" --> PY
+    PF -- "stdin" --> PY
+    PY -- "confiance &lt; 0.80" --> LLM
+    LLM -- "catégorie + regex proposée" --> PY
+    PY --> DB
+    DB --> DSH
+    PY -- "Rapport quotidien" --> CSV
+    PY -- "POST JSON" --> CMS
+    PY -- "Anomalie ?" --> SLK
+    PY -- "Contact (faux bounce)" --> EX
+
+    classDef ext fill:#1f2937,stroke:#475569,color:#e5e7eb,stroke-width:1.5px
+    classDef infra fill:#1e3a8a,stroke:#60a5fa,color:#dbeafe,stroke-width:1.5px
+    classDef svc fill:#312e81,stroke:#a78bfa,color:#ede9fe,stroke-width:1.5px
+    classDef py fill:#4c1d95,stroke:#c4b5fd,color:#f3e8ff,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef ui fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+      </div>
+
+      <div class="legend">
+        <span class="chip"><span class="dot in"></span> Entrées (Postfix / IMAP)</span>
+        <span class="chip"><span class="dot core"></span> Pipeline Python</span>
+        <span class="chip"><span class="dot ai"></span> LLM Claude (fallback)</span>
+        <span class="chip"><span class="dot store"></span> Stockage SQLite</span>
+        <span class="chip"><span class="dot out"></span> Sorties (CSV / Webhook)</span>
+        <span class="chip"><span class="dot alert"></span> Alertes Slack</span>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCHÉMA 2 — APPLICATION INTERNE                               -->
+    <!-- ============================================================ -->
+    <section class="card">
+      <div class="card-head">
+        <div class="badge">02</div>
+        <h2>Détail de l'application — pipeline interne</h2>
+      </div>
+      <p class="card-sub">Vue rapprochée : comment un message traverse les étages du pipeline Python.</p>
+
+      <div class="mermaid">
+flowchart LR
+    IN[" Serveur Mail Cogiterra<br/>(Exchange)"]:::infra
+
+    subgraph APP ["📦 Application Python"]
+        direction TB
+        DET[" Bounce Detector<br/>(bounce vs contact)"]:::py
+        PRS[" Parser MIME + DSN<br/>(RFC 3464)"]:::py
+        RUL{{" Rules Engine<br/>règles déterministes"}}:::rules
+        LLM[" Claude Haiku 4.5<br/>fallback si conf &lt; 0.80"]:::ai
+        CNT[" Soft-bounce<br/>cross-jours"]:::py
+        DB[(" SQLite<br/>5 tables")]:::db
+        DSH[" Dashboard<br/>Streamlit 7 onglets"]:::ui
+    end
+
+    OUT1[" 3 CSV<br/>par email"]:::out
+    OUT2[" Webhook CMS<br/>(POST JSON)"]:::out
+    OUT3[" Alertes Slack<br/>(anomalies)"]:::alert
+    FWD[" Forward BAL<br/>contact"]:::infra
+
+    IN -- "IMAP poll<br/>ou Postfix pipe" --> DET
+    DET -- "contact ?" --> FWD
+    DET -- "bounce" --> PRS
+    PRS --> RUL
+    RUL -- "conf ≥ 0.80 (90%+ des cas)" --> CNT
+    RUL -- "conf &lt; 0.80" --> LLM
+    LLM -- "catégorie + regex" --> CNT
+    LLM -. "self-improving rules" .-> RUL
+    CNT --> DB
+    DB --> DSH
+    DB -- "Rapport quotidien" --> OUT1
+    DB --> OUT2
+    DB --> OUT3
+
+    classDef infra fill:#1e3a8a,stroke:#60a5fa,color:#dbeafe,stroke-width:1.5px
+    classDef py fill:#4c1d95,stroke:#c4b5fd,color:#f3e8ff,stroke-width:1.5px
+    classDef rules fill:#1e40af,stroke:#93c5fd,color:#dbeafe,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef ui fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+      </div>
+
+      <div class="legend">
+        <span class="chip"><span class="dot in"></span> Source IMAP / Postfix</span>
+        <span class="chip"><span class="dot core"></span> Étages du pipeline</span>
+        <span class="chip"><span class="dot ai"></span> LLM (uniquement si confiance &lt; 0.80)</span>
+        <span class="chip"><span class="dot store"></span> SQLite + Dashboard</span>
+        <span class="chip"><span class="dot out"></span> Sorties (CSV / Webhook / Forward)</span>
+        <span class="chip"><span class="dot alert"></span> Alertes</span>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCHÉMA 3 — FLOWCHART LOGIQUE DÉTAILLÉ                        -->
+    <!-- ============================================================ -->
+    <section class="card">
+      <div class="card-head">
+        <div class="badge">03</div>
+        <h2>Flowchart logique — décision complète</h2>
+      </div>
+      <p class="card-sub">Tous les chemins possibles : du mail envoyé au CSV final, en passant par les règles, le LLM, le compteur soft et les alertes.</p>
+
+      <div class="mermaid">
+flowchart TB
+    A[" Envoi mail<br/>au client"]:::start
+    B[" Réception<br/>fournisseur"]:::flow
+    C{" Erreur SMTP ?"}:::decision
+    D[" Bounce DSN<br/>retour expéditeur"]:::flow
+    E[" Arrivée BAL bounces<br/>(Postfix ou IMAP)"]:::flow
+
+    F{" Est-ce un bounce ?<br/>(détecteur)"}:::decision
+    G[" Forward BAL<br/>contact"]:::out
+
+    H[" Parser MIME + DSN<br/>extraction adresse,<br/>code, raison"]:::flow
+
+    I{" Rules Engine<br/>confiance ≥ 0.80 ?"}:::decision
+    J[" Catégorisation<br/>par règles"]:::flow
+    K[" Appel<br/>Claude Haiku 4.5"]:::ai
+
+    L{" LLM confiant ?"}:::decision
+    M[" Catégorisation<br/>par LLM"]:::flow
+    N[" Catégorie<br/>'unknown'"]:::warn
+    O[" Suggestion regex<br/>→ rule_suggestions"]:::ai
+
+    P[" Compteur<br/>soft cross-jours +1"]:::flow
+    Q{" Catégorie ?"}:::decision
+    R[" to_delete<br/>(hard bounce)"]:::out
+    S[" to_pause<br/>(soft ≥ seuil)"]:::out
+    T[" to_modify<br/>(changement adresse)"]:::out
+    U[" Ignore<br/>(OOF, congé...)"]:::flow
+
+    V[" SQLite<br/>(result + stats + counters)"]:::db
+    W{" Anomalie ?<br/>pic / hard% / unknown%"}:::decision
+    X[" 🚨 Alerte Slack"]:::alert
+    Y[" Rapport quotidien<br/>3 CSV par email"]:::out
+    Z[" Webhook CMS<br/>POST JSON"]:::out
+
+    A --> B --> C
+    C -- "Oui" --> D --> E
+    C -- "Non (delivered)" --> END((" delivered")):::ok
+
+    E --> F
+    F -- "Non (contact)" --> G
+    F -- "Oui (bounce)" --> H --> I
+    I -- "Oui" --> J --> P
+    I -- "Non" --> K --> L
+    L -- "Oui" --> M --> O
+    L -- "Non" --> N
+    M --> P
+    N --> P
+    O -. "adoption dashboard" .-> I
+
+    P --> Q
+    Q --> R
+    Q --> S
+    Q --> T
+    Q --> U
+    R --> V
+    S --> V
+    T --> V
+    U --> V
+
+    V --> W
+    W -- "Oui" --> X
+    V --> Y
+    V --> Z
+
+    classDef start fill:#065f46,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef flow fill:#1e293b,stroke:#94a3b8,color:#e5e7eb,stroke-width:1.5px
+    classDef decision fill:#7c2d12,stroke:#fb923c,color:#fed7aa,stroke-width:1.5px
+    classDef ai fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1.5px
+    classDef out fill:#78350f,stroke:#fbbf24,color:#fef3c7,stroke-width:1.5px
+    classDef db fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+    classDef alert fill:#7f1d1d,stroke:#fb7185,color:#fecdd3,stroke-width:1.5px
+    classDef warn fill:#713f12,stroke:#facc15,color:#fef9c3,stroke-width:1.5px
+    classDef ok fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1.5px
+      </div>
+
+      <div class="legend">
+        <span class="chip"><span class="dot store"></span> Départ / OK</span>
+        <span class="chip"><span class="dot core"></span> Étape de flux</span>
+        <span class="chip"><span class="dot out" style="background:#fb923c"></span> Décision</span>
+        <span class="chip"><span class="dot ai"></span> LLM</span>
+        <span class="chip"><span class="dot out"></span> Sortie</span>
+        <span class="chip"><span class="dot alert"></span> Alerte</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>Pour intégrer dans <code>index.html</code> : copie n'importe quel bloc <code>&lt;div class="mermaid"&gt;...&lt;/div&gt;</code> ci-dessus, ou inclus cette page en iframe.</p>
+      <p>Cogiterra Bounces — H3 NIGHT INNOVATHON 2026</p>
+    </footer>
+
+  </div>
+
+  <!-- Mermaid v10 (ESM) -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: '#0a0e1a',
+        primaryColor: '#1f2937',
+        primaryTextColor: '#e5e7eb',
+        primaryBorderColor: '#475569',
+        lineColor: '#94a3b8',
+        secondaryColor: '#312e81',
+        tertiaryColor: '#1e293b',
+        fontFamily: 'Inter, system-ui, sans-serif'
+      },
+      flowchart: {
+        curve: 'basis',
+        padding: 14,
+        nodeSpacing: 50,
+        rankSpacing: 70,
+        htmlLabels: true
+      }
+    });
+  </script>
+</body>
+</html>
