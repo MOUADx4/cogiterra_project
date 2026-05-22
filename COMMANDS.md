@@ -60,7 +60,20 @@ tail -f logs/app.log
 
 ---
 
-## 📊 3. Lancer le dashboard Streamlit
+## 📊 3. Lancer le dashboard
+
+### Option A — Dashboard PHP (recommandé pour Cogiterra)
+Stack 100% PHP, lit la même base SQLite que le pipeline Python.
+
+```bash
+php -S localhost:8080 -t dashboard-php/
+```
+
+➡️ **http://localhost:8080**
+
+> Aucun `composer install` requis. Voir [`dashboard-php/README.md`](dashboard-php/README.md) pour le détail.
+
+### Option B — Dashboard Streamlit (Python, original)
 
 ```bash
 source venv/bin/activate
@@ -189,7 +202,10 @@ python main.py --mode pipe < email.eml      # temps réel
 python main.py --mode poll                  # IMAP périodique
 python main.py --mode report                # rapport quotidien
 
-# Dashboard
+# Dashboard PHP (recommandé)
+php -S localhost:8080 -t dashboard-php/     # http://localhost:8080
+
+# Dashboard Streamlit (original Python)
 streamlit run dashboard/app.py              # http://localhost:8501
 
 # Slides
