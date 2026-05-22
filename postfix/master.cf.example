@@ -1,0 +1,41 @@
+# =========================================================================
+# Configuration Postfix pour bounce_processor2
+# =========================================================================
+#
+# Méthode 1 — Service pipe dédié (recommandé pour la production)
+# -------------------------------------------------------------------------
+# Ajouter dans /etc/postfix/master.cf :
+
+bounce-pipe unix - n n - - pipe
+  flags=Rq user=bounceuser argv=/opt/bounce_processor2/venv/bin/python
+  /opt/bounce_processor2/main.py --mode pipe
+
+# Ajouter dans /etc/postfix/main.cf :
+#
+#   transport_maps = hash:/etc/postfix/transport
+#
+# Et dans /etc/postfix/transport :
+#
+#   bounces@example.com  bounce-pipe:
+#
+# Puis : postmap /etc/postfix/transport && systemctl reload postfix
+#
+# =========================================================================
+# Méthode 2 — Alias système (plus simple, mais moins flexible)
+# -------------------------------------------------------------------------
+# Dans /etc/aliases :
+#
+#   bounces: "|/opt/bounce_processor2/venv/bin/python /opt/bounce_processor2/main.py --mode pipe"
+#
+# Puis : newaliases
+#
+# =========================================================================
+# Préparer l'utilisateur système
+# -------------------------------------------------------------------------
+#   sudo useradd -r -s /usr/sbin/nologin bounceuser
+#   sudo chown -R bounceuser:bounceuser /opt/bounce_processor2
+#
+# =========================================================================
+# Crontab (en tant que bounceuser, via "sudo -u bounceuser crontab -e")
+# -------------------------------------------------------------------------
+#   0 6 * * * cd /opt/bounce_processor2 && /opt/bounce_processor2/venv/bin/python main.py --mode report >> logs/cron.log 2>&1

@@ -1,0 +1,27 @@
+From: postmaster@redirect.example.com
+To: bounces@example.com
+Subject: Delivery Status Notification (Failure)
+Date: Wed, 15 Jan 2025 11:00:00 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+ boundary="dkim1"
+MIME-Version: 1.0
+
+--dkim1
+Content-Type: text/plain; charset=utf-8
+
+The message was rejected because the DKIM signature could not be
+verified after forwarding. The receiving server returned a 550 due
+to authentication failure during the redirection from the legacy
+domain.
+
+--dkim1
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; redirect.example.com
+
+Final-Recipient: rfc822;contact@newdomain.io
+Action: failed
+Status: 5.7.0
+Diagnostic-Code: smtp; 550 5.7.0 DKIM signature did not verify
+
+--dkim1--

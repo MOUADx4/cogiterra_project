@@ -1,0 +1,11 @@
+From: MAILER-DAEMON@oldmail.example.com
+To: bounces@example.com
+Subject: Returned mail
+Date: Wed, 15 Jan 2025 14:00:00 +0000
+Content-Type: text/plain; charset=utf-8
+MIME-Version: 1.0
+
+Hi. This is the qmail-send program at oldmail.example.com.
+I tried to deliver your message to obscure_recipient@strangedomain.zz
+but something went wrong. The server gave a weird response that we
+cannot interpret. Please try again or contact your administrator.
